@@ -54,7 +54,7 @@ BuildRequires: libopenssl-devel
 # end of distribution specific definitions
 
 %define main_version 1.17.6
-%define main_release 1%{?dist}.ngx
+%define main_release 2%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{main_version}
 
@@ -121,6 +121,7 @@ make %{?_smp_mflags}
 %{__mv} %{bdir}/objs/nginx \
     %{bdir}/objs/nginx-debug
 ./configure %{BASE_CONFIGURE_ARGS} \
+    --with-openssl=./openssl-OpenSSL_1_1_1d/ \
     --with-cc-opt="%{WITH_CC_OPT}" \
     --with-ld-opt="%{WITH_LD_OPT}"
 make %{?_smp_mflags}
