@@ -84,7 +84,7 @@ Source10: nginx.suse.logrotate
 Source11: nginx-debug.service
 Source12: COPYRIGHT
 Source13: nginx.check-reload.sh
-Source14: https://github.com/openssl/openssl/archive/OpenSSL_1_1_1d.tar.gz
+Source14: https://www.openssl.org/source/openssl-1.1.1d.tar.gz
 
 License: 2-clause BSD-like license
 
@@ -113,7 +113,7 @@ tar -zxf %{SOURCE14}
 
 %build
 ./configure %{BASE_CONFIGURE_ARGS} \
-    --with-openssl=./openssl-OpenSSL_1_1_1d/ \
+    --with-openssl=./openssl-1.1.1d/ \
     --with-cc-opt="%{WITH_CC_OPT}" \
     --with-ld-opt="%{WITH_LD_OPT}" \
     --with-debug
@@ -121,7 +121,7 @@ make %{?_smp_mflags}
 %{__mv} %{bdir}/objs/nginx \
     %{bdir}/objs/nginx-debug
 ./configure %{BASE_CONFIGURE_ARGS} \
-    --with-openssl=./openssl-OpenSSL_1_1_1d/ \
+    --with-openssl=./openssl-1.1.1d/ \
     --with-cc-opt="%{WITH_CC_OPT}" \
     --with-ld-opt="%{WITH_LD_OPT}"
 make %{?_smp_mflags}
