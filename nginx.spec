@@ -51,9 +51,19 @@ BuildRequires: libopenssl-devel
 %define _debugsource_template %{nil}
 %endif
 
+%if 0%{?fedora}
+%define _debugsource_template %{nil}
+%global _hardened_build 1
+%define _group System Environment/Daemons
+BuildRequires: openssl-devel
+Requires(pre): shadow-utils
+%endif
+
 # end of distribution specific definitions
 
-%define main_version 1.17.9
+%define openssl_version 1.1.1f
+
+%define main_version 1.17.10
 %define main_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{main_version}
@@ -84,7 +94,7 @@ Source10: nginx.suse.logrotate
 Source11: nginx-debug.service
 Source12: COPYRIGHT
 Source13: nginx.check-reload.sh
-Source14: https://www.openssl.org/source/openssl-1.1.1f.tar.gz
+Source14: https://www.openssl.org/source/openssl-%{openssl_version}.tar.gz
 
 License: 2-clause BSD-like license
 
@@ -113,7 +123,7 @@ tar -zxf %{SOURCE14}
 
 %build
 ./configure %{BASE_CONFIGURE_ARGS} \
-    --with-openssl=./openssl-1.1.1f/ \
+    --with-openssl=./openssl-%{openssl_version}/ \
     --with-cc-opt="%{WITH_CC_OPT}" \
     --with-ld-opt="%{WITH_LD_OPT}" \
     --with-debug
@@ -121,7 +131,7 @@ make %{?_smp_mflags}
 %{__mv} %{bdir}/objs/nginx \
     %{bdir}/objs/nginx-debug
 ./configure %{BASE_CONFIGURE_ARGS} \
-    --with-openssl=./openssl-1.1.1f/ \
+    --with-openssl=./openssl-%{openssl_version}/ \
     --with-cc-opt="%{WITH_CC_OPT}" \
     --with-ld-opt="%{WITH_LD_OPT}"
 make %{?_smp_mflags}
@@ -331,6 +341,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Tue Apr 14 2020 Konstantin Pavlov <thresh@nginx.com>
+- 1.17.10
+
 * Tue Mar 03 2020 Konstantin Pavlov <thresh@nginx.com>
 - 1.17.9
 
