@@ -61,7 +61,7 @@ Requires(pre): shadow-utils
 
 # end of distribution specific definitions
 
-%define openssl_version 1.1.1f
+%define openssl_version 1.1.1g
 
 %define main_version 1.19.1
 %define main_release 1%{?dist}.ngx
