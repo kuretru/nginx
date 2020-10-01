@@ -61,9 +61,9 @@ Requires(pre): shadow-utils
 
 # end of distribution specific definitions
 
-%define openssl_version 1.1.1g
+%define openssl_version 1.1.1h
 
-%define main_version 1.19.2
+%define main_version 1.19.3
 %define main_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{main_version}
@@ -341,6 +341,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Tue Sep 29 2020 Konstantin Pavlov <thresh@nginx.com>
+- 1.19.3
+
 * Tue Aug 11 2020 Konstantin Pavlov <thresh@nginx.com>
 - 1.19.2
 
