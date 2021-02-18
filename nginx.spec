@@ -61,9 +61,9 @@ Requires(pre): shadow-utils
 
 # end of distribution specific definitions
 
-%define openssl_version 1.1.1h
+%define openssl_version 1.1.1j
 
-%define base_version 1.19.6
+%define base_version 1.19.7
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -78,7 +78,7 @@ Name: nginx
 Version: %{base_version}
 Release: %{base_release}
 Vendor: Nginx, Inc.
-URL: http://nginx.org/
+URL: https://nginx.org/
 Group: %{_group}
 
 Source0: https://nginx.org/download/%{name}-%{version}.tar.gz
@@ -290,14 +290,14 @@ if [ $1 -eq 1 ]; then
 Thanks for using nginx!
 
 Please find the official documentation for nginx here:
-* http://nginx.org/en/docs/
+* https://nginx.org/en/docs/
 
 Please subscribe to nginx-announce mailing list to get
 the most important news about nginx:
-* http://nginx.org/en/support.html
+* https://nginx.org/en/support.html
 
 Commercial subscriptions for nginx are available on:
-* http://nginx.com/products/
+* https://nginx.com/products/
 
 ----------------------------------------------------------------------
 BANNER
@@ -342,6 +342,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Tue Feb 16 2021 Konstantin Pavlov <thresh@nginx.com> - 1.19.7-1%{?dist}.ngx
+- 1.19.7-1
+
 * Tue Dec 15 2020 Konstantin Pavlov <thresh@nginx.com> - 1.19.6-1%{?dist}.ngx
 - 1.19.6-1
 
