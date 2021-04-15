@@ -63,7 +63,7 @@ Requires(pre): shadow-utils
 
 %define openssl_version 1.1.1k
 
-%define base_version 1.19.9
+%define base_version 1.19.10
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -86,7 +86,7 @@ Source1: logrotate
 Source2: nginx.init.in
 Source3: nginx.sysconf
 Source4: nginx.conf
-Source5: nginx.vh.default.conf
+Source5: nginx.default.conf
 Source7: nginx-debug.sysconf
 Source8: nginx.service
 Source9: nginx.upgrade.sh
@@ -95,6 +95,8 @@ Source11: nginx-debug.service
 Source12: nginx.copyright
 Source13: nginx.check-reload.sh
 Source14: https://www.openssl.org/source/openssl-%{openssl_version}.tar.gz
+
+
 
 License: 2-clause BSD-like license
 
@@ -114,7 +116,7 @@ a mail proxy server.
 %endif
 
 %prep
-%setup -q
+%autosetup -p1
 cp %{SOURCE2} .
 sed -e 's|%%DEFAULTSTART%%|2 3 4 5|g' -e 's|%%DEFAULTSTOP%%|0 1 6|g' \
     -e 's|%%PROVIDES%%|nginx|g' < %{SOURCE2} > nginx.init
@@ -342,6 +344,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Tue Apr 13 2021 Andrei Belov <defan@nginx.com> - 1.19.10-1%{?dist}.ngx
+- 1.19.10-1
+
 * Tue Mar 30 2021 Konstantin Pavlov <thresh@nginx.com> - 1.19.9-1%{?dist}.ngx
 - 1.19.9-1
 
