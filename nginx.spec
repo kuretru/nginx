@@ -4,35 +4,30 @@
 %define nginx_group nginx
 %define nginx_loggroup adm
 
-# distribution specific definitions
-%define use_systemd (0%{?rhel} >= 7 || 0%{?fedora} >= 19 || 0%{?suse_version} >= 1315 || 0%{?amzn} >= 2)
-
-%if %{use_systemd}
 BuildRequires: systemd
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-%endif
 
 %if 0%{?rhel}
 %define _group System Environment/Daemons
 %endif
 
-%if 0%{?rhel} == 6
-Requires(pre): shadow-utils
-Requires: initscripts >= 8.36
-Requires(post): chkconfig
-Requires: openssl >= 1.0.1
-BuildRequires: openssl-devel >= 1.0.1
-%endif
-
-%if 0%{?rhel} == 7
+%if (0%{?rhel} == 7) && (0%{?amzn} == 0)
 %define epoch 1
 Epoch: %{epoch}
 Requires(pre): shadow-utils
 Requires: openssl >= 1.0.2
 BuildRequires: openssl-devel >= 1.0.2
 %define dist .el7
+%endif
+
+%if (0%{?rhel} == 7) && (0%{?amzn} == 2)
+%define epoch 1
+Epoch: %{epoch}
+Requires(pre): shadow-utils
+Requires: openssl11 >= 1.1.1
+BuildRequires: openssl11-devel >= 1.1.1
 %endif
 
 %if 0%{?rhel} == 8
@@ -63,7 +58,7 @@ Requires(pre): shadow-utils
 
 %define openssl_version 1.1.1k
 
-%define base_version 1.19.10
+%define base_version 1.21.0
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -77,24 +72,21 @@ Summary: High performance web server
 Name: nginx
 Version: %{base_version}
 Release: %{base_release}
-Vendor: Nginx, Inc.
+Vendor: NGINX Packaging <nginx-packaging@f5.com>
 URL: https://nginx.org/
 Group: %{_group}
 
 Source0: https://nginx.org/download/%{name}-%{version}.tar.gz
 Source1: logrotate
-Source2: nginx.init.in
-Source3: nginx.sysconf
-Source4: nginx.conf
-Source5: nginx.default.conf
-Source7: nginx-debug.sysconf
-Source8: nginx.service
-Source9: nginx.upgrade.sh
-Source10: nginx.suse.logrotate
-Source11: nginx-debug.service
-Source12: nginx.copyright
-Source13: nginx.check-reload.sh
-Source14: https://www.openssl.org/source/openssl-%{openssl_version}.tar.gz
+Source2: nginx.conf
+Source3: nginx.default.conf
+Source4: nginx.service
+Source5: nginx.upgrade.sh
+Source6: nginx.suse.logrotate
+Source7: nginx-debug.service
+Source8: nginx.copyright
+Source9: nginx.check-reload.sh
+Source10: https://www.openssl.org/source/openssl-%{openssl_version}.tar.gz
 
 
 
@@ -117,12 +109,7 @@ a mail proxy server.
 
 %prep
 %autosetup -p1
-cp %{SOURCE2} .
-sed -e 's|%%DEFAULTSTART%%|2 3 4 5|g' -e 's|%%DEFAULTSTOP%%|0 1 6|g' \
-    -e 's|%%PROVIDES%%|nginx|g' < %{SOURCE2} > nginx.init
-sed -e 's|%%DEFAULTSTART%%||g' -e 's|%%DEFAULTSTOP%%|0 1 2 3 4 5 6|g' \
-    -e 's|%%PROVIDES%%|nginx-debug|g' < %{SOURCE2} > nginx-debug.init
-tar -zxf %{SOURCE14}
+tar -zxf %{SOURCE10}
 
 %build
 ./configure %{BASE_CONFIGURE_ARGS} \
@@ -158,48 +145,34 @@ cd $RPM_BUILD_ROOT%{_sysconfdir}/nginx && \
     %{__ln_s} ../..%{_libdir}/nginx/modules modules && cd -
 
 %{__mkdir} -p $RPM_BUILD_ROOT%{_datadir}/doc/%{name}-%{base_version}
-%{__install} -m 644 -p %{SOURCE12} \
+%{__install} -m 644 -p %{SOURCE8} \
     $RPM_BUILD_ROOT%{_datadir}/doc/%{name}-%{base_version}/COPYRIGHT
 
 %{__mkdir} -p $RPM_BUILD_ROOT%{_sysconfdir}/nginx/conf.d
 %{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/nginx/nginx.conf
-%{__install} -m 644 -p %{SOURCE4} \
+%{__install} -m 644 -p %{SOURCE2} \
     $RPM_BUILD_ROOT%{_sysconfdir}/nginx/nginx.conf
-%{__install} -m 644 -p %{SOURCE5} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/nginx/conf.d/default.conf
-
-%{__mkdir} -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
 %{__install} -m 644 -p %{SOURCE3} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/nginx
-%{__install} -m 644 -p %{SOURCE7} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/nginx-debug
+    $RPM_BUILD_ROOT%{_sysconfdir}/nginx/conf.d/default.conf
 
 %{__install} -p -D -m 0644 %{bdir}/objs/nginx.8 \
     $RPM_BUILD_ROOT%{_mandir}/man8/nginx.8
 
-%if %{use_systemd}
-# install systemd-specific files
 %{__mkdir} -p $RPM_BUILD_ROOT%{_unitdir}
-%{__install} -m644 %SOURCE8 \
+%{__install} -m644 %SOURCE4 \
     $RPM_BUILD_ROOT%{_unitdir}/nginx.service
-%{__install} -m644 %SOURCE11 \
+%{__install} -m644 %SOURCE7 \
     $RPM_BUILD_ROOT%{_unitdir}/nginx-debug.service
 %{__mkdir} -p $RPM_BUILD_ROOT%{_libexecdir}/initscripts/legacy-actions/nginx
-%{__install} -m755 %SOURCE9 \
+%{__install} -m755 %SOURCE5 \
     $RPM_BUILD_ROOT%{_libexecdir}/initscripts/legacy-actions/nginx/upgrade
-%{__install} -m755 %SOURCE13 \
+%{__install} -m755 %SOURCE9 \
     $RPM_BUILD_ROOT%{_libexecdir}/initscripts/legacy-actions/nginx/check-reload
-%else
-# install SYSV init stuff
-%{__mkdir} -p $RPM_BUILD_ROOT%{_initrddir}
-%{__install} -m755 nginx.init $RPM_BUILD_ROOT%{_initrddir}/nginx
-%{__install} -m755 nginx-debug.init $RPM_BUILD_ROOT%{_initrddir}/nginx-debug
-%endif
 
 # install log rotation stuff
 %{__mkdir} -p $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
 %if 0%{?suse_version}
-%{__install} -m 644 -p %{SOURCE10} \
+%{__install} -m 644 -p %{SOURCE6} \
     $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/nginx
 %else
 %{__install} -m 644 -p %{SOURCE1} \
@@ -208,6 +181,10 @@ cd $RPM_BUILD_ROOT%{_sysconfdir}/nginx && \
 
 %{__install} -m755 %{bdir}/objs/nginx-debug \
     $RPM_BUILD_ROOT%{_sbindir}/nginx-debug
+
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/nginx/koi-utf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/nginx/koi-win
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/nginx/win-utf
 
 %check
 %{__rm} -rf $RPM_BUILD_ROOT/usr/src
@@ -237,22 +214,12 @@ cat /dev/null > debugsourcefiles.list
 %config(noreplace) %{_sysconfdir}/nginx/fastcgi_params
 %config(noreplace) %{_sysconfdir}/nginx/scgi_params
 %config(noreplace) %{_sysconfdir}/nginx/uwsgi_params
-%config(noreplace) %{_sysconfdir}/nginx/koi-utf
-%config(noreplace) %{_sysconfdir}/nginx/koi-win
-%config(noreplace) %{_sysconfdir}/nginx/win-utf
 
 %config(noreplace) %{_sysconfdir}/logrotate.d/nginx
-%config(noreplace) %{_sysconfdir}/sysconfig/nginx
-%config(noreplace) %{_sysconfdir}/sysconfig/nginx-debug
-%if %{use_systemd}
 %{_unitdir}/nginx.service
 %{_unitdir}/nginx-debug.service
 %dir %{_libexecdir}/initscripts/legacy-actions/nginx
 %{_libexecdir}/initscripts/legacy-actions/nginx/*
-%else
-%{_initrddir}/nginx
-%{_initrddir}/nginx-debug
-%endif
 
 %attr(0755,root,root) %dir %{_libdir}/nginx
 %attr(0755,root,root) %dir %{_libdir}/nginx/modules
@@ -278,13 +245,8 @@ exit 0
 %post
 # Register the nginx service
 if [ $1 -eq 1 ]; then
-%if %{use_systemd}
     /usr/bin/systemctl preset nginx.service >/dev/null 2>&1 ||:
     /usr/bin/systemctl preset nginx-debug.service >/dev/null 2>&1 ||:
-%else
-    /sbin/chkconfig --add nginx
-    /sbin/chkconfig --add nginx-debug
-%endif
     # print site info
     cat <<BANNER
 ----------------------------------------------------------------------
@@ -323,20 +285,12 @@ fi
 
 %preun
 if [ $1 -eq 0 ]; then
-%if %use_systemd
     /usr/bin/systemctl --no-reload disable nginx.service >/dev/null 2>&1 ||:
     /usr/bin/systemctl stop nginx.service >/dev/null 2>&1 ||:
-%else
-    /sbin/service nginx stop > /dev/null 2>&1
-    /sbin/chkconfig --del nginx
-    /sbin/chkconfig --del nginx-debug
-%endif
 fi
 
 %postun
-%if %use_systemd
 /usr/bin/systemctl daemon-reload >/dev/null 2>&1 ||:
-%endif
 if [ $1 -ge 1 ]; then
     /sbin/service nginx status  >/dev/null 2>&1 || exit 0
     /sbin/service nginx upgrade >/dev/null 2>&1 || echo \
@@ -344,6 +298,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Tue May 25 2021 Konstantin Pavlov <thresh@nginx.com> - 1.21.0-1%{?dist}.ngx
+- 1.21.0-1
+
 * Tue Apr 13 2021 Andrei Belov <defan@nginx.com> - 1.19.10-1%{?dist}.ngx
 - 1.19.10-1
 
