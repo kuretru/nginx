@@ -58,7 +58,7 @@ Requires(pre): shadow-utils
 
 %define openssl_version 1.1.1m
 
-%define base_version 1.21.5
+%define base_version 1.21.6
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -298,6 +298,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Tue Jan 25 2022 Mikhail Isachenkov <mikhail.isachenkov@nginx.com> - 1.21.6-1%{?dist}.ngx
+- 1.21.6-1
+
 * Tue Dec 28 2021 Konstantin Pavlov <thresh@nginx.com> - 1.21.5-1%{?dist}.ngx
 - 1.21.5-1
 - built with PCRE2
