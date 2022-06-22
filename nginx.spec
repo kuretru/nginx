@@ -38,6 +38,14 @@ BuildRequires: openssl-devel >= 1.1.1
 %define _debugsource_template %{nil}
 %endif
 
+%if 0%{?rhel} == 9
+%define epoch 1
+Epoch: %{epoch}
+Requires(pre): shadow-utils
+BuildRequires: openssl-devel
+%define _debugsource_template %{nil}
+%endif
+
 %if 0%{?suse_version} >= 1315
 %define _group Productivity/Networking/Web/Servers
 %define nginx_loggroup trusted
@@ -56,9 +64,9 @@ Requires(pre): shadow-utils
 
 # end of distribution specific definitions
 
-%define openssl_version 1.1.1m
+%define openssl_version 1.1.1p
 
-%define base_version 1.21.6
+%define base_version 1.23.0
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -298,6 +306,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Tue Jun 21 2022 Nginx Packaging <nginx-packaging@f5.com> - 1.23.0-1%{?dist}.ngx
+- 1.23.0-1
+
 * Tue Jan 25 2022 Mikhail Isachenkov <mikhail.isachenkov@nginx.com> - 1.21.6-1%{?dist}.ngx
 - 1.21.6-1
 
