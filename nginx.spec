@@ -64,9 +64,9 @@ Requires(pre): shadow-utils
 
 # end of distribution specific definitions
 
-%define openssl_version 1.1.1p
+%define openssl_version 1.1.1q
 
-%define base_version 1.23.0
+%define base_version 1.23.1
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -306,6 +306,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Tue Jul 19 2022 Nginx Packaging <nginx-packaging@f5.com> - 1.23.1-1%{?dist}.ngx
+- 1.23.1-1
+
 * Tue Jun 21 2022 Nginx Packaging <nginx-packaging@f5.com> - 1.23.0-1%{?dist}.ngx
 - 1.23.0-1
 
