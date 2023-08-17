@@ -61,6 +61,7 @@ BuildRequires: libopenssl-devel
 %define _debugsource_template %{nil}
 %endif
 
+# This also applies to Amazon Linux 2023
 %if 0%{?fedora}
 %define _debugsource_template %{nil}
 %global _hardened_build 1
@@ -72,9 +73,9 @@ Requires(pre): shadow-utils
 
 # end of distribution specific definitions
 
-%define openssl_version 3.0.9-quic1
+%define openssl_version 3.0.10-quic1
 
-%define base_version 1.25.1
+%define base_version 1.25.2
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -115,6 +116,10 @@ BuildRequires: perl
 
 Provides: webserver
 Provides: nginx-r%{base_version}
+
+%if !(0%{?rhel} == 7)
+Recommends: logrotate
+%endif
 
 %description
 nginx [engine x] is an HTTP and reverse proxy server, as well as
@@ -315,6 +320,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Tue Aug 15 2023 Nginx Packaging <nginx-packaging@f5.com> - 1.25.2-1%{?dist}.ngx
+- 1.25.2-1
+
 * Tue Jun 13 2023 Nginx Packaging <nginx-packaging@f5.com> - 1.25.1-1%{?dist}.ngx
 - 1.25.1-1
 
