@@ -73,7 +73,7 @@ Requires(pre): shadow-utils
 
 # end of distribution specific definitions
 
-%define openssl_version 3.1.5-quic1
+%define openssl_version 3.1.4-quic1
 
 %define base_version 1.25.4
 %define base_release 1%{?dist}.ngx
