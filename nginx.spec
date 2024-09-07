@@ -73,10 +73,10 @@ Requires(pre): shadow-utils
 
 # end of distribution specific definitions
 
-%define openssl_version 3.1.5-quic1
+%define openssl_version 3.1.7-quic1
 
-%define base_version 1.27.0
-%define base_release 2%{?dist}.ngx
+%define base_version 1.27.1
+%define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
 
@@ -320,6 +320,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Wed Aug 14 2024 Nginx Packaging <nginx-packaging@f5.com> - 1.27.1-1%{?dist}.ngx
+- 1.27.1-1
+
 * Wed May 29 2024 Nginx Packaging <nginx-packaging@f5.com> - 1.27.0-2%{?dist}.ngx
 - Packages were updated to account for a change in CHANGES wording in
   1.27.0. No functional changes.
