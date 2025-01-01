@@ -43,7 +43,7 @@ BuildRequires: openssl-devel >= 1.1.1
 %endif
 
 %if 0%{?rhel} == 9
-%define epoch 1
+%define epoch 2
 Epoch: %{epoch}
 Requires(pre): shadow-utils
 Requires: procps-ng
@@ -75,7 +75,7 @@ Requires(pre): shadow-utils
 
 %define openssl_version 3.1.7-quic1
 
-%define base_version 1.27.2
+%define base_version 1.27.3
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -320,6 +320,12 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Tue Nov 26 2024 Nginx Packaging <nginx-packaging@f5.com> - 1.27.3-1%{?dist}.ngx
+- 1.27.3-1
+ 
+* Wed Nov 20 2024 Nginx Packaging <nginx-packaging@f5.com> - 1.27.2-2%{?dist}.ngx
+- RHEL 9 only: bumped Epoch to override appstream version.
+
 * Wed Oct  2 2024 Nginx Packaging <nginx-packaging@f5.com> - 1.27.2-1%{?dist}.ngx
 - 1.27.2-1
 
