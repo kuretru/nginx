@@ -52,6 +52,15 @@ BuildRequires: gcc
 %define _debugsource_template %{nil}
 %endif
 
+%if 0%{?rhel} == 10
+%define epoch 2
+Epoch: %{epoch}
+Requires(pre): shadow-utils
+Requires: procps-ng
+BuildRequires: openssl-devel
+%define _debugsource_template %{nil}
+%endif
+
 %if 0%{?suse_version} >= 1315
 %define _group Productivity/Networking/Web/Servers
 %define nginx_loggroup trusted
@@ -75,7 +84,7 @@ Requires(pre): shadow-utils
 
 %define openssl_version 3.1.7-quic1
 
-%define base_version 1.27.5
+%define base_version 1.29.0
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -320,6 +329,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Tue Jun 24 2025 Nginx Packaging <nginx-packaging@f5.com> - 1.29.0-1%{?dist}.ngx
+- 1.29.0-1
+
 * Wed Apr 16 2025 Nginx Packaging <nginx-packaging@f5.com> - 1.27.5-1%{?dist}.ngx
 - 1.27.5-1
 
