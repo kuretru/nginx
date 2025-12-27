@@ -84,7 +84,7 @@ Requires(pre): shadow-utils
 
 %define openssl_version 3.1.7-quic1
 
-%define base_version 1.29.3
+%define base_version 1.29.4
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -134,7 +134,7 @@ Recommends: logrotate
 nginx [engine x] is an HTTP and reverse proxy server, as well as
 a mail proxy server.
 
-%if 0%{?suse_version} >= 1315
+%if ( 0%{?suse_version} && 0%{?suse_version} < 1600 )
 %debug_package
 %endif
 
@@ -324,11 +324,21 @@ fi
 /usr/bin/systemctl daemon-reload >/dev/null 2>&1 ||:
 if [ $1 -ge 1 ]; then
     /sbin/service nginx status  >/dev/null 2>&1 || exit 0
+%if 0%{?suse_version} >= 1600
+    %{_libexecdir}/initscripts/legacy-actions/nginx/upgrade >/dev/null 2>&1 || echo \
+%else
     /sbin/service nginx upgrade >/dev/null 2>&1 || echo \
+%endif
         "Binary upgrade failed, please check nginx's error.log"
 fi
 
 %changelog
+* Tue Dec  9 2025 Nginx Packaging <nginx-packaging@f5.com> - 1.29.4-1%{?dist}.ngx
+- 1.29.4-1
+
+* Fri Nov 21 2025 Nginx Packaging <nginx-packaging@f5.com> - 1.29.3-2%{?dist}.ngx
+- SLES 16: fixed automatic binary upgrade
+
 * Tue Oct 28 2025 Nginx Packaging <nginx-packaging@f5.com> - 1.29.3-1%{?dist}.ngx
 - 1.29.3-1
 
@@ -349,7 +359,7 @@ fi
 
 * Tue Nov 26 2024 Nginx Packaging <nginx-packaging@f5.com> - 1.27.3-1%{?dist}.ngx
 - 1.27.3-1
- 
+
 * Wed Nov 20 2024 Nginx Packaging <nginx-packaging@f5.com> - 1.27.2-2%{?dist}.ngx
 - RHEL 9 only: bumped Epoch to override appstream version.
 
