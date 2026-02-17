@@ -84,7 +84,7 @@ Requires(pre): shadow-utils
 
 %define openssl_version 3.1.7-quic1
 
-%define base_version 1.29.4
+%define base_version 1.29.5
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -333,6 +333,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Wed Feb  4 2026 Nginx Packaging <nginx-packaging@f5.com> - 1.29.5-1%{?dist}.ngx
+- 1.29.5-1
+
 * Tue Dec  9 2025 Nginx Packaging <nginx-packaging@f5.com> - 1.29.4-1%{?dist}.ngx
 - 1.29.4-1
 
