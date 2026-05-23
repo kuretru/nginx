@@ -84,7 +84,7 @@ Requires(pre): shadow-utils
 
 %define openssl_version 3.1.7-quic1
 
-%define base_version 1.29.8
+%define base_version 1.31.0
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -333,6 +333,34 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Wed May 13 2026 Nginx Packaging <nginx-packaging@f5.com> - 1.31.0-1%{?dist}.ngx
+- 1.31.0-1
+- Security: Security: when using the "proxy_set_body" directive, an attacker
+  might inject data in the proxied request to an HTTP/2 backend
+  (CVE-2026-42926). Thanks to Mufeed VH of Winfunc Research.
+- Security: Security: a heap memory buffer overflow might occur in a worker
+  process while handling a specially crafted request by
+  ngx_http_rewrite_module, potentially resulting in arbitrary code execution
+  (CVE-2026-42945). Thanks to Leo Lin.
+- Security: Security: a heap memory buffer overread might occur in a worker
+  process while handling a specially crafted response by
+  ngx_http_scgi_module or ngx_http_uwsgi_module, allowing an attacker to
+  cause a disclosure of worker process memory or segmentation fault in a
+  worker process (CVE-2026-42946). Thanks to Leo Lin.
+- Security: Security: a heap memory buffer overread might occur in a worker
+  process while handling a specially sent response with decoding from UTF-8
+  via the "charset_map" directive, allowing an attacker to cause a limited
+  disclosure of worker proccess memory or segmentation fault in a worker
+  process (CVE-2026-42934). Thanks to David Carlier.
+- Security: Security: when using HTTP/3, processing of connection migration
+  might cause new QUIC streams to receive a new client address before
+  validation, allowing an attacker to cause address spoofing
+  (CVE-2026-40460). Thanks to Rodrigo Laneth.
+- Security: Security: use-after-free might occur during DNS server response
+  processing if the "ssl_ocsp" directive was used, allowing an attacker to
+  cause worker process memory corruption or segmentation fault in a worker
+  process (CVE-2026-40701). Thanks to Leo Lin.
+
 * Tue Apr  7 2026 Nginx Packaging <nginx-packaging@f5.com> - 1.29.8-1%{?dist}.ngx
 - 1.29.8-1
 
