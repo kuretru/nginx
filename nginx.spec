@@ -84,7 +84,7 @@ Requires(pre): shadow-utils
 
 %define openssl_version 3.1.7-quic1
 
-%define base_version 1.31.0
+%define base_version 1.31.1
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -333,6 +333,13 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Fri May 22 2026 Nginx Packaging <nginx-packaging@f5.com> - 1.31.1-1%{?dist}.ngx
+- 1.31.1-1
+- Security: a heap memory buffer overflow might occur in a worker process
+  when using a configuration with overlapping captures in
+  ngx_http_rewrite_module, potentially resulting in arbitrary code execution
+  (CVE-2026-9256). Thanks to Mufeed VH of Winfunc Research.
+
 * Wed May 13 2026 Nginx Packaging <nginx-packaging@f5.com> - 1.31.0-1%{?dist}.ngx
 - 1.31.0-1
 - Security: Security: when using the "proxy_set_body" directive, an attacker
