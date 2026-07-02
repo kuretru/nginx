@@ -84,7 +84,7 @@ Requires(pre): shadow-utils
 
 %define openssl_version 3.1.7-quic1
 
-%define base_version 1.31.1
+%define base_version 1.31.2
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -333,6 +333,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Wed Jun 17 2026 Nginx Packaging <nginx-packaging@f5.com> - 1.31.2-1%{?dist}.ngx
+- 1.31.2-1
+
 * Fri May 22 2026 Nginx Packaging <nginx-packaging@f5.com> - 1.31.1-1%{?dist}.ngx
 - 1.31.1-1
 - Security: a heap memory buffer overflow might occur in a worker process
