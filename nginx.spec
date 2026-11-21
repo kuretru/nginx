@@ -61,7 +61,7 @@ BuildRequires: openssl-devel
 %define _debugsource_template %{nil}
 %endif
 
-%if 0%{?suse_version} >= 1315
+%if 0%{?suse_version}
 %define _group Productivity/Networking/Web/Servers
 %define nginx_loggroup trusted
 Requires(pre): shadow
@@ -84,7 +84,7 @@ Requires(pre): shadow-utils
 
 %define openssl_version 3.1.7-quic1
 
-%define base_version 1.31.8
+%define base_version 1.31.9
 %define base_release 1%{?dist}.ngx
 
 %define bdir %{_builddir}/%{name}-%{base_version}
@@ -222,7 +222,7 @@ cd $RPM_BUILD_ROOT%{_sysconfdir}/nginx && \
 cd %{bdir}
 grep -v 'usr/src' debugfiles.list > debugfiles.list.new && mv debugfiles.list.new debugfiles.list
 cat /dev/null > debugsources.list
-%if 0%{?suse_version} >= 1500
+%if 0%{?suse_version}
 cat /dev/null > debugsourcefiles.list
 %endif
 
@@ -333,6 +333,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Wed Nov 11 2026 Nginx Packaging <nginx-packaging@f5.com> - 1.31.9-1%{?dist}.ngx
+- 1.31.9-1
+
 * Wed Oct 21 2026 Nginx Packaging <nginx-packaging@f5.com> - 1.31.8-1%{?dist}.ngx
 - 1.31.8-1
 
